@@ -203,6 +203,19 @@ class MaterialTable extends React.Component {
       this.props.onSelectionChange(selectedRows);
     }
   }
+
+  onChangePage = (...args) => {
+    this.props.onChangePage(...args);
+  }
+
+  onChangeRowsPerPage = (...args) => {
+    this.props.onChangeRowsPerPage(...args);
+  }
+
+  onOrderChanged = (...args) => {
+    this.props.onOrderChanged(...args);
+  }
+
   renderFooter() {
     const props = this.getProps();
     if (props.options.paging) {
@@ -220,6 +233,7 @@ class MaterialTable extends React.Component {
                 onChangePage={(event, page) => {
                   this.setState({ currentPage: page }, () => {
                     this.setData();
+                    this.onChangePage(event, page);
                   });
                 }}
                 onChangeRowsPerPage={(event) => {
@@ -229,6 +243,7 @@ class MaterialTable extends React.Component {
                     return state;
                   }, () => {
                     this.setData();
+                    this.onChangeRowsPerPage(event);
                   });
                 }}
                 ActionsComponent={MTablePagination}
@@ -287,6 +302,7 @@ class MaterialTable extends React.Component {
               onOrderChanged={(orderBy, orderDirection) => {
                 this.setState({ orderBy, orderDirection, currentPage: 0 }, () => {
                   this.setData();
+                  this.onOrderChanged(orderBy, orderDirection);
                 });
               }}
               actionsHeaderIndex={props.options.actionsColumnIndex}
@@ -333,6 +349,8 @@ class MaterialTable extends React.Component {
   }
 }
 
+const id = id => {};
+
 MaterialTable.defaultProps = {
   actions: [],
   classes: {},
@@ -357,7 +375,10 @@ MaterialTable.defaultProps = {
     actions: 'Actions',
     nRowsSelected: '{0} row(s) selected',
     emptyDataSourceMessage: 'No records to display'
-  }
+  },
+  onChangeRowsPerPage: id,
+  onChangePage: id,
+  onOrderChanged: id,
 };
 
 MaterialTable.propTypes = {
@@ -407,7 +428,10 @@ MaterialTable.propTypes = {
     nRowsSelected: PropTypes.string,
     emptyDataSourceMessage: PropTypes.string
   }),
-  onSelectionChange: PropTypes.func
+  onSelectionChange: PropTypes.func,
+  onChangeRowsPerPage: PropTypes.func,
+  onChangePage: PropTypes.func,
+  onOrderChanged: PropTypes.func,
 };
 
 export default MaterialTable;
